@@ -55,8 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TodoPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TodoPage(
+                              task: tasks[index],
+                            )));
               },
               child: Dismissible(
                 key: Key(tasks[index].id.toString()),
@@ -78,7 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => TodoPage()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TodoPage(
+                        task: null,),
+                        )).then((value) => setState(() {}));
         },
         child: Center(child: Icon(Icons.add)),
         backgroundColor: Color(0xffd3a2e4),
