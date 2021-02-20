@@ -1,17 +1,18 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
-import 'package:todo/models/TaskModel.dart';
-import 'package:todo/models/Todo.dart';
+import 'package:todo/model/task.dart';
+import 'package:todo/model/todo.dart';
 
 class DataBaseHelper {
-
-    Future<Database> database() async {
+  Future<Database> database() async {
     return openDatabase(
       join(await getDatabasesPath(), 'todo.db'),
       onCreate: (db, version) async {
-        await db.execute("CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT)");
-        await db.execute("CREATE TABLE todos(id INTEGER PRIMARY KEY, taskId INTEGER, title TEXT, isDone INTEGER)");
+        await db.execute(
+            "CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT)");
+        await db.execute(
+            "CREATE TABLE todos(id INTEGER PRIMARY KEY, taskId INTEGER, title TEXT, isDone INTEGER)");
 
         return db;
       },
@@ -27,6 +28,11 @@ class DataBaseHelper {
       task.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<void> deleteTask(Task task) async {
+    Database db = await database();
+    await db.delete('tasks', where: "id = ?", whereArgs: [task.id]);
   }
 
   Future<void> insertTodo(ToDo todo) async {
