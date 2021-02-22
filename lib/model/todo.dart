@@ -1,8 +1,8 @@
 class ToDo {
   final int id;
-  final int taskId;
-  final String title;
-  final int isDone;
+  int taskId;
+  String title;
+  int isDone;
 
   ToDo({this.id, this.taskId, this.title, this.isDone});
 
