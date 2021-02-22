@@ -10,20 +10,44 @@ class TodoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DataBaseHelper db = DataBaseHelper();
-    return Container(
-      child: TextField(
-          controller: TextEditingController()
-            ..text = todo != null ? todo.title : "",
-          decoration: InputDecoration(
-            hintText: "Add a new todo ",
-            border: InputBorder.none,
-          ),
-          onSubmitted: (value) async {
-            if (todo == null) {
-              await db.insertTodo(
-                  ToDo(title: value, taskId: this.taskId, isDone: 1));
-            } else {}
-          }),
-    );
+    return (this.todo != null)
+        ? Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  db.insertTodo(new ToDo(
+                      id: todo.id,
+                      title: todo.title,
+                      taskId: todo.taskId,
+                      isDone: 1 - todo.isDone));
+                },
+                child: Container(
+                    padding: EdgeInsets.only(right: 20),
+                    child: (todo.isDone == 1)
+                        ? Icon(
+                            Icons.check_box,
+                            color: Color(0xffa2c8a2),
+                          )
+                        : Icon(
+                            Icons.check_box_outline_blank,
+                            color: Color(0xff3d3d3d),
+                          )),
+              ),
+              Expanded(
+                child: TextField(
+                    controller: TextEditingController()..text = this.todo.title,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    onSubmitted: (value) async {
+                      if (todo == null) {
+                        await db.insertTodo(
+                            ToDo(title: value, taskId: this.taskId, isDone: 0));
+                      } else {}
+                    }),
+              ),
+            ],
+          )
+        : Container();
   }
 }

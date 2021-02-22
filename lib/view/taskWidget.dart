@@ -24,7 +24,7 @@ class TaskWidget extends StatelessWidget {
           Text(
             (title != null) ? title : "Unnamed task",
             style: TextStyle(
-              color: Color(0xFF211551),
+              color: Color(0xff474747),
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),

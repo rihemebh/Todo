@@ -21,12 +21,12 @@ class _TodoPageState extends State<TodoPage> {
       setState(() {
         todos = todos;
       });
-      print(todos);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    showData();
     return Scaffold(
       appBar: AppBar(
         title: TextField(
@@ -49,54 +49,49 @@ class _TodoPageState extends State<TodoPage> {
         ),
         backgroundColor: Color(0xffd3a2e4),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 29,
-              vertical: 32,
-            ),
-            margin: EdgeInsets.all(15),
-            child: TextField(
-              controller: TextEditingController()
-                ..text = widget.task != null ? widget.task.description : "",
-              decoration: InputDecoration(
-                hintText: "Write a description ",
-                border: InputBorder.none,
+      body: ListView.builder(
+          itemCount: todos != null ? todos.length : 1,
+          itemBuilder: (BuildContext context, int index) {
+            return SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 40, right: 40, top: 10),
+                      child: TodoWidget(
+                          todo: todos != null ? todos[index] : null,
+                          taskId: widget.task.id),
+                    ),
+                  ],
+                ),
               ),
-              onSubmitted: (value) async {
-                if (widget.task == null) {
-                  await db.insertTask(new Task(description: value));
-                } else {
-                  await db.updateTask(Task(
-                      id: widget.task.id,
-                      description: value,
-                      title: widget.task.title));
-                }
-              },
-            ),
-          ),
-          Container(
-              height: 200,
-              padding: EdgeInsets.symmetric(
-                horizontal: 29,
-                vertical: 32,
-              ),
-              margin: EdgeInsets.all(8),
-              child: (widget.task != null)
-                  ? ListView.builder(
-                      itemCount: todos != null ? todos.length : 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SingleChildScrollView(
-                          child: Container(
-                            child: TodoWidget(
-                                todo: todos != null ? todos[index] : null,
-                                taskId: widget.task.id),
-                          ),
-                        );
-                      })
-                  : Text("empty"))
-        ],
+            );
+          }),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xffd3a2e4),
+        onPressed: () {},
+        child: Center(child: Icon(Icons.add)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Container(
+          height: 50.0,
+          /*child: Row(
+              children: [
+                IconButton(
+                    iconSize: 30.0,
+                    padding: EdgeInsets.only(left: 28.0),
+                    icon: Icon(Icons.home)),
+                    
+                IconButton(
+                    iconSize: 30.0,
+                    padding: EdgeInsets.only(right: 28.0),
+                    icon: Icon(Icons.calendar_today)),
+              ],
+            )*/
+        ),
       ),
     );
   }

@@ -80,16 +80,37 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xffd3a2e4),
         onPressed: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => TodoPage(
-                        task: null,),
-                        )).then((value) => setState(() {}));
+                builder: (context) => TodoPage(
+                  task: null,
+                ),
+              )).then((value) => setState(() {}));
         },
         child: Center(child: Icon(Icons.add)),
-        backgroundColor: Color(0xffd3a2e4),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Container(
+          height: 50.0,
+          /*child: Row(
+              children: [
+                IconButton(
+                    iconSize: 30.0,
+                    padding: EdgeInsets.only(left: 28.0),
+                    icon: Icon(Icons.home)),
+                    
+                IconButton(
+                    iconSize: 30.0,
+                    padding: EdgeInsets.only(right: 28.0),
+                    icon: Icon(Icons.calendar_today)),
+              ],
+            )*/
+        ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
