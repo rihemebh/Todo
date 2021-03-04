@@ -4,6 +4,8 @@ import 'package:todo/model/task.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/view/todoWidget.dart';
 
+import 'dialog.dart';
+
 class TodoPage extends StatefulWidget {
   final Task task;
   TodoPage({Key key, @required this.task}) : super(key: key);
@@ -26,6 +28,7 @@ class _TodoPageState extends State<TodoPage> {
 
   @override
   Widget build(BuildContext context) {
+    TodoDialog dialog;
     showData();
     return Scaffold(
       appBar: AppBar(
@@ -52,25 +55,39 @@ class _TodoPageState extends State<TodoPage> {
       body: ListView.builder(
           itemCount: todos != null ? todos.length : 1,
           itemBuilder: (BuildContext context, int index) {
-            return SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 40, right: 40, top: 10),
-                      child: TodoWidget(
-                          todo: todos != null ? todos[index] : null,
-                          taskId: widget.task.id),
-                    ),
-                  ],
+            return Dismissible(
+              key: Key(todos[index].id.toString()),
+              onDismissed: (direction) {
+                db.deleteTodo(todos[index]);
+                setState(() {
+                  todos.removeAt(index);
+                });
+              },
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 40, right: 40, top: 10),
+                        child: TodoWidget(
+                            todo: todos != null ? todos[index] : null,
+                            taskId: widget.task.id),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
           }),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xffd3a2e4),
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  dialog.buildDialog(context, ToDo(), widget.task.id));
+        },
         child: Center(child: Icon(Icons.add)),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/view/dialog.dart';
 import 'package:todo/view/taskWidget.dart';
 import 'package:todo/view/todoPage.dart';
 import 'model/task.dart';
@@ -42,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    TaskDialog dialog;
     showData();
     return Scaffold(
       appBar: AppBar(
@@ -82,13 +84,10 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xffd3a2e4),
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TodoPage(
-                  task: null,
-                ),
-              )).then((value) => setState(() {}));
+          showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  dialog.buildDialog(context, Task()));
         },
         child: Center(child: Icon(Icons.add)),
       ),

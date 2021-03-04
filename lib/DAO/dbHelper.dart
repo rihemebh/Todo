@@ -37,6 +37,11 @@ class DataBaseHelper {
     await db.delete('tasks', where: "id = ?", whereArgs: [task.id]);
   }
 
+  Future<void> deleteTodo(ToDo todo) async {
+    Database db = await database();
+    await db.delete('todos', where: "id = ?", whereArgs: [todo.id]);
+  }
+
   Future<void> updateTask(Task task) async {
     Database db = await database();
     db.update("tasks", task.toMap(), where: "id=?", whereArgs: [task.id]);
